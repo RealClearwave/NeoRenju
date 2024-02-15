@@ -132,6 +132,9 @@ BOOL CFiveInARowDlg::OnInitDialog()
 	m_FontOver.CreatePointFont(1666, _T("微软雅黑"), NULL);
 	m_bState = false;
 
+	if (readINI(_T("Local"), _T("SaveLog"), _T("false")) == "true")
+		m_Manager.EnableLog(true);
+	
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
 
@@ -187,7 +190,6 @@ void CFiveInARowDlg::OnPaint()
 	dc.BitBlt(0, 0, bm.bmWidth, bm.bmHeight, &MemDC, 0, 0, SRCCOPY);
 	MemDC.SelectObject(pOldBitmap);
 	m_Manager.Show(&dc);
-	//AfxMessageBox(_T("请选择“开始”按钮开始新的游戏，按Esc键退出游戏！"));
 	CDialog::OnPaint();
 }
 
@@ -243,6 +245,11 @@ void CFiveInARowDlg::OnLButtonDown(UINT nFlags, CPoint point) {
 				CString res = httpGet(Prompt);
 			}
 
+			if (readINI(_T("Local"), _T("SaveLog"), _T("false")) == "true") {
+				std::ofstream fout(readINI(_T("Local"), _T("Logfile"), _T("replay.log")));
+				fout << m_Manager.GetLog();
+				fout.close();
+			}
 			KillTimer(1);
 			KillTimer(2);
 			CString csTemp;
@@ -277,6 +284,23 @@ void CFiveInARowDlg::OnLButtonDown(UINT nFlags, CPoint point) {
 bool CFiveInARowDlg::NewGame(int x, int y) {
 	int x0 = 35, y0 = 150, x1 = 200, y1 = 185;
 	if ((x >= x0 && x <= x1) && (y >= y0 && y <= y1)) {
+		//回放模式
+		if (readINI(_T("Local"), _T("Replay"), _T("false")) == "true") {
+			std::ifstream fin(readINI(_T("Local"), _T("Logfile"), _T("replay.log")));
+			int xx = 0, yy = 0;
+			m_Manager.NewGame();
+			while (fin >> xx >> yy) {
+				m_Manager.Add_Org(xx, yy);
+				CClientDC dc(this);
+				m_Manager.Show(&dc);
+				if (readINI(_T("Local"), _T("Sound"), _T("false")) == "true")
+					PlaySound(MAKEINTRESOURCE(IDR_WAVE1), AfxGetResourceHandle(), SND_ASYNC | SND_RESOURCE | SND_NODEFAULT);
+				Sleep(500);
+			}
+			fin.close();
+			return true;
+		}
+
 		if (readINI(_T("PVP"), _T("Enable"), _T("false")) == "true") {
 			netPid = readINI(_T("PVP"), _T("ID"), _T("1"));
 			netURL = readINI(_T("PVP"), _T("URL"), _T("http://127.0.0.1:1234"));
@@ -365,6 +389,13 @@ void CFiveInARowDlg::OnTimer(UINT_PTR nIDEvent) {
 
 				KillTimer(1);
 				KillTimer(2);
+
+				if (readINI(_T("Local"), _T("SaveLog"), _T("false")) == "true") {
+					std::ofstream fout(readINI(_T("Local"), _T("Logfile"), _T("replay.log")));
+					fout << m_Manager.GetLog();
+					fout.close();
+				}
+
 				CString csTemp;
 				if (m_Manager.GetWinner() == WHITE)
 					csTemp.Format(_T("白方胜!"));

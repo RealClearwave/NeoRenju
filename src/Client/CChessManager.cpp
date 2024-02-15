@@ -22,17 +22,21 @@ int CChessManager::Add(int x, int y) {
 	int x1, y1;
 	if (!Xy2Xy(x, y, x1, y1))
 		return 1;
-	for (int i = 0; i < m_nChess; i++)
-		if (x1 == m_aChess[i].GetX() && y1 == m_aChess[i].GetY())
-			return 2;
-	m_aChess[m_nChess].Set(m_nChess,x1,y1,m_Color);
-	m_nChess++;
-	m_Color = (m_Color == WHITE ? BLACK : WHITE);
-	return 0;
+	return Add_Org(x1, y1);
 }
 
 int CChessManager::Add_Org(int x, int y) {
 	int x1 = x, y1 = y;
+	char tmp[20];
+	if (enableLog) {
+		_itoa_s(x1, tmp, 10);
+		gameLog += tmp;
+		gameLog += " ";
+		_itoa_s(y1, tmp, 10);
+		gameLog += tmp;
+		gameLog += " \n";
+	}
+
 	for (int i = 0; i < m_nChess; i++)
 		if (x1 == m_aChess[i].GetX() && y1 == m_aChess[i].GetY())
 			return 2;
