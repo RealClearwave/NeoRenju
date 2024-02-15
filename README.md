@@ -16,7 +16,7 @@
 
 - [x] 在线存档
 
-- [x] 复盘（部分）
+- [x] 复盘
 
 - [x] 双方单独记时
 
@@ -41,6 +41,10 @@
 		-FiveInARow.exe		#主程序
 	-Server
 		-Server.exe			#服务器程序
+	-present
+		-Presentation.pptx	#项目介绍（ppt格式）
+		-Presentation.mp4	#项目介绍（视频）
+		-…					
 ```
 
 ### 编译方法
@@ -90,6 +94,9 @@ echo "Enable=false" >> ./src/Client/config.ini
 Sound=true			#是否在落子时播放声音
 Record=true			#是否在对局时录制音视频
 Focus=true			#是否在对局时始终将窗口置于最顶层
+SaveLog=true		#是否在对局时保存对局记录
+Replay=false		#是否开启复盘模式
+Logfile=Replay.log	#对局记录文件名称
 
 [PVP]
 Enable=false		#是否启用多人联机对局
@@ -101,6 +108,8 @@ ID=1				#对局者的ID（1或2）
 
 注2：联网对局时程序只会记录己方用时。
 
+注3：保存记录和复盘模式不能同时开启。
+
 ### 服务器配置方法
 
 #### 运行方法
@@ -109,7 +118,7 @@ ID=1				#对局者的ID（1或2）
 
 抄录命令行窗口中显示的网址并填写至客户端的```config.ini```中
 
-#### 查看对局记录方法
+#### 查看在线对局记录方法
 
 打开服务器网址，在网页上显示的列表中选择对应的文件
 
