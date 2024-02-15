@@ -7,17 +7,10 @@
 ## 已实现的功能
 
 - [x] 基础功能
-
 - [x] 落子声音
-
 - [x] 音视频录制
-
 - [x] 联网对战
-
-- [x] 在线存档
-
-- [x] 复盘
-
+- [x] 存档和复盘
 - [x] 双方单独记时
 
 ## 编译与配置
@@ -28,11 +21,11 @@
 -src
 	-Client
 		-res				#项目资源
-		-Bridge.py			#沟通桥
-		-FiveInARow.sln		#MFC主程序
+		-Bridge.py			#沟通桥源码
+		-FiveInARow.sln		#MFC主程序源码
 		-...
 	-Server
-		-Server.py			#服务器程序
+		-Server.py			#服务器程序源码
 -dist
 	-Client
 		-Bridge.exe			#沟通桥可执行文件
@@ -94,7 +87,7 @@ echo "Enable=false" >> ./src/Client/config.ini
 Sound=true			#是否在落子时播放声音
 Record=true			#是否在对局时录制音视频
 Focus=true			#是否在对局时始终将窗口置于最顶层
-SaveLog=true		#是否在对局时保存对局记录
+SaveLog=true		#是否在对局时存档
 Replay=false		#是否开启复盘模式
 Logfile=Replay.log	#对局记录文件名称
 
@@ -108,7 +101,7 @@ ID=1				#对局者的ID（1或2）
 
 注2：联网对局时程序只会记录己方用时。
 
-注3：保存记录和复盘模式不能同时开启。
+注3：存档模式和复盘模式不能同时开启。
 
 ### 服务器配置方法
 
