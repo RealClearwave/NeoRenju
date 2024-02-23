@@ -1,17 +1,18 @@
-# FiveInARow 五子棋程序
+# NeoRenju 五子棋程序
 
 ## 简介
 
-本软件为基于Visual C++、Python等语言，采用了**MFC**、ffmpeg、Flask等技术的**多人在线**/离线五子棋对战实例。
+本软件为基于Visual C++、Python等语言，采用了**MFC**、ffmpeg、Flask、Tensorflow等技术的**多人在线**/离线五子棋对战实例。
 
 ## 已实现的功能
 
 - [x] 基础功能
 - [x] 落子声音
-- [x] 音视频录制
-- [x] 联网对战
+- [x] **音视频录制**
+- [x] **联网对战**
 - [x] 存档和复盘
 - [x] 双方单独记时
+- [x] **基于CNN**的AI对战（测试）
 
 ## 编译与配置
 
@@ -22,16 +23,17 @@
 	-Client
 		-res				#项目资源
 		-Bridge.py			#沟通桥源码
-		-FiveInARow.sln		#MFC主程序源码
+		-NeoRenju.sln		#MFC主程序源码
 		-...
 	-Server
 		-Server.py			#服务器程序源码
+		-renju_cnn.h5		#AI模型
 -dist
 	-Client
 		-Bridge.exe			#沟通桥可执行文件
 		-config.ini			#配置文件
 		-ffmpeg.exe			#录屏与解码工具
-		-FiveInARow.exe		#主程序
+		-NeoRenju.exe		#主程序
 	-Server
 		-Server.exe			#服务器程序
 	-present
@@ -68,15 +70,15 @@ echo "[PVP]" >> ./src/Client/config.ini
 echo "Enable=false" >> ./src/Client/config.ini
 ```
 
-4.打开```./src/Client/FiveInARow.sln```,按**F5**编译
+4.打开```./src/Client/NeoRenju.sln```,按**F5**编译
 
-5.将```./src/Client/x64/Release/FiveInARow.exe```复制到```./dist/Client/```路径下
+5.将```./src/Client/x64/Release/NeoRenju.exe```复制到```./dist/Client/```路径下
 
 即可得到本包附带的预编译的可执行文件。
 
 ## 运行方法
 
-双击```./dist/Client/FiveInARow.exe```即可运行程序。
+双击```./dist/Client/NeoRenju.exe```即可运行程序。
 
 ## 配置方法
 
@@ -102,6 +104,10 @@ ID=1				#对局者的ID（1或2）
 注2：联网对局时程序只会记录己方用时。
 
 注3：存档模式和复盘模式不能同时开启。
+
+注4：AI对战处于测试阶段，仅支持从.py文件启动。若需启用请**手动安装tensorflow依赖**后将```Server.py```中```UseAITech```置为```True```
+
+
 
 ### 服务器配置方法
 
@@ -133,3 +139,6 @@ A2：检查服务器是否就绪、检查防火墙、检查网络连接。
 
 A3：检查防火墙和网络连接。如仍无法启动，尝试```pip install flask```
 
+**Q4：无法启动AI模型，提示Module Not Found**
+
+A4：重新安装TensorFlow模块及Cuda驱动
